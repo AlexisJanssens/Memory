@@ -19,12 +19,14 @@ let deck = [];
 
 function getCards(maxCards) {
   for (let i = 0; i < maxCards / 2; i++) {
-    let randomInt = Math.floor(Math.random() * (cards.length + 1));
-    if (deck.find((element) => element.number == randomInt)) {
+    let randomInt = Math.floor(Math.random() * cards.length);
+    console.log(randomInt);
+    if (deck.find((element) => element.number === randomInt)) {
+      console.log("pas content");
       i--;
     } else {
-      deck.push(randomInt);
-      deck.push(randomInt);
+      deck.push(cards[randomInt]);
+      deck.push(cards[randomInt]);
     }
   }
 }
