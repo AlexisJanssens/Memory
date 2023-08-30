@@ -1,20 +1,21 @@
 const cards = [
-    { number: 0, name: "Jeremy", url: "" },
-    { number: 1, name: "Nicolas", url: "" },
-    { number: 2, name: "Thomas", url: "" },
-    { number: 3, name: "Pauline", url: "" },
-    { number: 4, name: "Sam", url: "" },
-    { number: 5, name: "Alexis", url: "" },
-    { number: 6, name: "Maude", url: "" },
-    { number: 7, name: "Julie", url: "" },
-    { number: 8, name: "Rodrigue", url: "" },
-    { number: 9, name: "Bastien", url: "" },
-    { number: 10, name: "Drillon", url: "" },
-    { number: 11, name: "Chris", url: "" },
-    { number: 12, name: "Sabrina", url: "" },
-    { number: 13, name: "Marc", url: "" },
+    { number: 0, name: "Jeremy", url: "./images/jeremy.jpg" },
+    { number: 1, name: "Nicolas", url: "./images/nico.png" },
+    { number: 2, name: "Thomas", url: "./images/thomas.jpeg" },
+    { number: 3, name: "Pauline", url: "./images/pauline.png" },
+    { number: 4, name: "Sam", url: "./images/sam.JPEG" },
+    { number: 5, name: "Alexis", url: "./images/alexis.jpg" },
+    { number: 6, name: "Maude", url: "./images/maude.jpeg" },
+    { number: 7, name: "Julie", url: "./images/julie.png" },
+    { number: 8, name: "Rodrigue", url: "./images/rodrigue.jpg" },
+    { number: 9, name: "Bastien", url: "./images/bastien.png" },
+    { number: 10, name: "Drillon", url: "./images/drillon.jpg" },
+    { number: 11, name: "Chris", url: "./images/Chris.png" },
+    { number: 12, name: "Sabrina", url: "./images/sabrina.jpg" },
+    { number: 13, name: "Marc", url: "./images/marc.jpg" },
 ]
 console.log(cards)
+
 let deck = []
 let indexCard = 0
 let lastIndex
@@ -52,40 +53,10 @@ function shuffle(array) {
 function distribute() {
     for (let card in deck) {
         let cardContent = document.createElement("div")
-        let cardP = document.createElement("p")
         cardContent.classList.add("card" + card, "card")
         table.appendChild(cardContent)
         cardContent.addEventListener("click", () => {
-            cardP.innerHTML = deck[card].name
-
-            console.log(card)
-            cardContent.appendChild(cardP)
-            if (revealedCards.find((element) => element == deck[card].name)) {
-                console.log("carte déja révélée..")
-            } else if (guess == "") {
-                guess = deck[card].name
-                cardP.classList.add("lastGuess")
-                lastIndex = card
-                console.log("premier guess")
-            } else if (deck[card].name == guess && card != lastIndex) {
-                console.log("bien ouej")
-                revealedCards.push(guess)
-                guess = ""
-                document
-                    .getElementsByClassName("lastGuess")[0]
-                    .classList.remove("lastGuess")
-            } else if (card == lastIndex) {
-                console.log("veuillez choisir un carte différente")
-            } else {
-                guess = deck[card].name
-                console.log("essaie encore")
-                guess = ""
-                cardP.innerHTML = ""
-                document.getElementsByClassName("lastGuess")[0].innerHTML = ""
-                document
-                    .getElementsByClassName("lastGuess")[0]
-                    .classList.remove("lastGuess")
-            }
+            revealCard(card, cardContent)
         })
     }
 }
@@ -95,26 +66,77 @@ let difficulty = document.getElementById("difficulty")
 
 difficulty.addEventListener("change", () => {
     if (difficulty.value == "easy") {
-        table.innerHTML = ""
-        deck = []
+        resetGame()
         getCards(12)
         shuffle(deck)
         distribute()
     } else if (difficulty.value == "normal") {
-        table.innerHTML = ""
-        deck = []
+        resetGame()
         getCards(18)
         shuffle(deck)
         distribute()
+
         console.log("normal")
     } else if (difficulty.value == "hard") {
-        table.innerHTML = ""
-        deck = []
+        resetGame()
         getCards(24)
         shuffle(deck)
         distribute()
         console.log("hard")
     } else {
-        table.innerHTML = ""
+        resetGame()
     }
 })
+
+function deleteLastGuess() {
+    document
+        .getElementsByClassName("lastGuess")[0]
+        .classList.remove("lastGuess")
+}
+
+function resetImg() {
+    document.getElementsByClassName("lastGuess")[0].style.backgroundColor =
+        "aquamarine"
+    document.getElementsByClassName("lastGuess")[0].style.backgroundImage = ""
+}
+
+function resetCards(cardHTML) {
+    cardHTML[0].style.backgroundColor = "aquamarine"
+    cardHTML[0].style.backgroundImage = ""
+    document.getElementsByClassName("lastGuess")[0].innerHTML = ""
+    resetImg()
+
+    deleteLastGuess()
+    console.log("go")
+}
+
+function resetGame() {
+    table.innerHTML = ""
+    deck = []
+
+    revealedCards = []
+    guess = ""
+}
+
+function revealCard(card, cardContent) {
+    console.log(card)
+    let cardHTML = document.getElementsByClassName("card" + card)
+    cardHTML[0].style.backgroundColor = "transparent"
+    cardHTML[0].style.backgroundImage = "url(" + deck[card].url + ")"
+    if (revealedCards.find((element) => element == deck[card].name)) {
+    } else if (guess == "") {
+        guess = deck[card].name
+        cardHTML[0].classList.add("lastGuess")
+        lastIndex = card
+    } else if (deck[card].name == guess && card != lastIndex) {
+        revealedCards.push(guess)
+        guess = ""
+        deleteLastGuess()
+    } else if (card == lastIndex) {
+        console.log("veuillez choisir un carte différente")
+    } else {
+        guess = deck[card].name
+        guess = ""
+        setTimeout(() => resetCards(cardHTML), 1000)
+    }
+}
