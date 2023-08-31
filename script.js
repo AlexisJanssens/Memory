@@ -21,6 +21,7 @@ let indexCard = 0
 let lastIndex
 let guess = ""
 let revealedCards = []
+let flippedCard = []
 
 function getCards(maxCards) {
     for (let i = 0; i < maxCards / 2; i++) {
@@ -50,14 +51,49 @@ function shuffle(array) {
     return array
 }
 
+function flipcard(cardContent) {
+    cardContent.classList.toggle("flipCard")
+}
+
 function distribute() {
     for (let card in deck) {
+        let effectContainer = document.createElement("div")
+        effectContainer.classList.add("effectContainer")
+        table.appendChild(effectContainer)
+
+        let mainContainer = document.createElement("div")
+        mainContainer.classList.add("mainContainer")
+        effectContainer.appendChild(mainContainer)
+
         let cardContent = document.createElement("div")
         cardContent.classList.add("card" + card, "card")
-        table.appendChild(cardContent)
+        mainContainer.appendChild(cardContent)
+
+        let front = document.createElement("div")
+        front.classList.add("front")
+        cardContent.appendChild(front)
+
+        let back = document.createElement("div")
+        back.classList.add("back")
+        cardContent.appendChild(back)
         cardContent.addEventListener("click", () => {
-            revealCard(card, cardContent)
+            flipcard(cardContent, revealedCards, card)
         })
+        cardContent.addEventListener("click", () => {
+            revealCard(card, back)
+        })
+    }
+}
+
+function flipcard(cardContent, revealedCard, card) {
+    if (
+        flippedCard.find((elem) => elem == card) ||
+        revealedCard.find((elem) => elem == deck[card].name)
+    ) {
+        console.log("pas content")
+    } else {
+        cardContent.classList.toggle("flipCard")
+        flippedCard.push(card)
     }
 }
 
@@ -95,15 +131,26 @@ function deleteLastGuess() {
 }
 
 function resetImg() {
-    document.getElementsByClassName("lastGuess")[0].style.backgroundColor =
-        "aquamarine"
-    document.getElementsByClassName("lastGuess")[0].style.backgroundImage = ""
+    // document.getElementsByClassName("lastGuess")[0].style.backgroundColor =
+    //     "yellow"
+    // document.getElementsByClassName("lastGuess")[0].style.backgroundImage = ""
+    document.getElementsByClassName("lastGuess")[0].classList.toggle("flipCard")
 }
 
-function resetCards(cardHTML) {
-    cardHTML[0].style.backgroundColor = "aquamarine"
-    cardHTML[0].style.backgroundImage = ""
-    document.getElementsByClassName("lastGuess")[0].innerHTML = ""
+function resetHTML(back, lastBack) {
+    back.style.backgroundColor = "yellow"
+    back.style.backgroundImage = ""
+    lastBack.style.backgroundColor = "yellow"
+    lastBack.style.backgroundImage = ""
+}
+
+function resetCards(cardHTML, back) {
+    let lastBack = document.querySelector(".lastGuess .back")
+    console.log(lastBack)
+    setTimeout(() => resetHTML(back, lastBack), 1000)
+
+    cardHTML[0].classList.toggle("flipCard")
+    document.getElementsByClassName("lastGuess")[0]
     resetImg()
 
     deleteLastGuess()
@@ -113,16 +160,15 @@ function resetCards(cardHTML) {
 function resetGame() {
     table.innerHTML = ""
     deck = []
-
     revealedCards = []
     guess = ""
 }
 
-function revealCard(card, cardContent) {
+function revealCard(card, back) {
     console.log(card)
     let cardHTML = document.getElementsByClassName("card" + card)
-    cardHTML[0].style.backgroundColor = "transparent"
-    cardHTML[0].style.backgroundImage = "url(" + deck[card].url + ")"
+    back.style.backgroundColor = "transparent"
+    back.style.backgroundImage = "url(" + deck[card].url + ")"
     if (revealedCards.find((element) => element == deck[card].name)) {
     } else if (guess == "") {
         guess = deck[card].name
@@ -137,6 +183,7 @@ function revealCard(card, cardContent) {
     } else {
         guess = deck[card].name
         guess = ""
-        setTimeout(() => resetCards(cardHTML), 1000)
+        flippedCard = []
+        setTimeout(() => resetCards(cardHTML, back), 1000)
     }
 }

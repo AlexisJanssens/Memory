@@ -1,32 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Memory</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div id="page">
-      <header>
-        <nav>
-          <form action="#">
-            <label for="difficulty">difficulty</label>
-            <select name="difficulty" id="difficulty">
-              <option value="select">select mode</option>
-              <option value="easy">easy (12 cartes)</option>
-              <option value="normal">normal (18 cartes)</option>
-              <option value="hard">hard (24 cartes)</option>
-            </select>
-            <input type="button" value="restart" />
-            <div id="timer">timer</div>
-          </form>
-        </nav>
-      </header>
-      <body>
-        <div id="memoryContent"></div>
-      </body>
-    </div>
-    <script src="script.js"></script>
-  </body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Memory</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <header>
+            <nav>
+                <form action="#">
+                    <label for="difficulty">difficulty</label>
+                    <select name="difficulty" id="difficulty">
+                        <option value="select">select mode</option>
+                        <option value="easy">easy (12 cartes)</option>
+                        <option value="normal">normal (18 cartes)</option>
+                        <option value="hard">hard (24 cartes)</option>
+                    </select>
+                    <input type="button" value="restart" />
+                    <div id="timer">timer</div>
+                </form>
+            </nav>
+        </header>
+        <main>
+            <div id="memoryContent"></div>
+        </main>
+        <script src="script.js"></script>
+    </body>
 </html>
