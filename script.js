@@ -1,6 +1,6 @@
 // All avaibles cards
 const cards = [
-    { number: 0, name: "Jeremy", url: "./images/jeremy.jpg" },
+    { number: 0, name: "Jeremy", url: "./images/Jeremy.jpg" },
     { number: 1, name: "Nicolas", url: "./images/nico.png" },
     { number: 2, name: "Thomas", url: "./images/thomas.jpeg" },
     { number: 3, name: "Pauline", url: "./images/pauline.png" },
